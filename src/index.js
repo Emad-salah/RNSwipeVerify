@@ -141,12 +141,11 @@ export default class RNSwipeVerify extends Component {
     return (
       <View
         style={{
-          borderColor: borderColor,
-          borderWidth: 2,
           borderRadius: borderRadius + 4,
-          padding: 2,
-          flex: 1,
-          height: buttonSize+4
+          padding: 4,
+          backgroundColor: backgroundColor,
+          justifyContent: 'center',
+          height: buttonSize+8
         }}
       >
         <View
@@ -160,6 +159,7 @@ export default class RNSwipeVerify extends Component {
           style={{
             backgroundColor,
             height: buttonSize,
+            width: '100%',
             borderRadius,
             justifyContent: "center"
           }}
