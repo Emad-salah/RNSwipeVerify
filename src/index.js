@@ -82,11 +82,12 @@ export default class RNSwipeVerify extends Component {
           drag.setValue({ x: toX, y: 0 });
         }
       }),
-      onPanResponderRelease: () => {
+      onPanResponderRelease: async () => {
         if (this.state.verify) return;
         if (this.state.percent >= 100) {
           this.setState({ moving: false, verify: true });
-          this.props.onVerified(); //communicate that the verification was successful
+          await this.props.onVerified(); //communicate that the verification was successful
+          this.reset();
 
           const { visible, duration } = this.props.okButton;
           if (!visible) {
@@ -132,7 +133,9 @@ export default class RNSwipeVerify extends Component {
       borderColor,
       backgroundColor,
       icon,
-      borderRadius
+      borderRadius,
+      style,
+      disabled
     } = this.props;
     const { buttonOpacity } = this.state;
 
@@ -140,13 +143,13 @@ export default class RNSwipeVerify extends Component {
 
     return (
       <View
-        style={{
+        style={[{
           borderRadius: borderRadius + 4,
-          padding: 4,
-          backgroundColor: backgroundColor,
+          borderWidth: 4,
+          borderColor: backgroundColor,
           justifyContent: 'center',
           height: buttonSize+8
-        }}
+        }, style]}
       >
         <View
           onLayout={event => {
@@ -176,7 +179,7 @@ export default class RNSwipeVerify extends Component {
           )}
 
           <Animated.View
-            {...this._panResponder.panHandlers}
+            {...(!disabled ? this._panResponder.panHandlers : {})}
             style={[
               position,
               {
