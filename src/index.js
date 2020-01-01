@@ -32,6 +32,7 @@ const defaultProps = {
   textColor: "#000",
   borderColor: "rgba(0,0,0,0)",
   okButton: { visible: true, duration: 300 },
+  swipeColor: "#294f93",
   borderRadius: 0
 };
 
@@ -42,6 +43,7 @@ export default class RNSwipeVerify extends Component {
     this.state = {
       drag: new Animated.ValueXY(),
       buttonOpacity: new Animated.Value(1),
+      size: new Animated.Value(props.buttonSize / 2),
       moving: false,
       verify: false,
       percent: 0,
@@ -130,25 +132,26 @@ export default class RNSwipeVerify extends Component {
     const {
       buttonColor,
       buttonSize,
+      height,
       borderColor,
       backgroundColor,
       icon,
       borderRadius,
       style,
-      disabled
+      disabled,
+      swipeColor
     } = this.props;
     const { buttonOpacity } = this.state;
 
-    const position = { transform: this.state.drag.getTranslateTransform() };
+    const position = { transform: this.state.drag.getTranslateTransform()
+};
 
     return (
       <View
         style={[{
           borderRadius: borderRadius + 4,
-          borderWidth: 4,
-          borderColor: backgroundColor,
           justifyContent: 'center',
-          height: buttonSize+8
+          height
         }, style]}
       >
         <View
@@ -161,7 +164,7 @@ export default class RNSwipeVerify extends Component {
           }}
           style={{
             backgroundColor,
-            height: buttonSize,
+            height,
             width: '100%',
             borderRadius,
             justifyContent: "center"
@@ -178,6 +181,21 @@ export default class RNSwipeVerify extends Component {
             </View>
           )}
 
+          <Animated.View style={[
+            {
+              position: 'absolute',
+              left: 0,
+              width: Animated.add(this.state.size, this.state.drag.x),
+              height: '100%',
+              backgroundColor: swipeColor,
+              borderTopLeftRadius: borderRadius,
+              borderBottomLeftRadius: borderRadius
+              // transform: [{
+              //   translateX: -1 * this.state.dimensions.width
+              // }]
+            }
+          ]} />
+
           <Animated.View
             {...(!disabled ? this._panResponder.panHandlers : {})}
             style={[
@@ -189,7 +207,8 @@ export default class RNSwipeVerify extends Component {
                 backgroundColor: buttonColor,
                 justifyContent: "center",
                 alignItems: "center",
-                opacity: buttonOpacity
+                opacity: buttonOpacity,
+                elevation: 4
               }
             ]}
           >
